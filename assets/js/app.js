@@ -17,7 +17,8 @@
     firebase.initializeApp(firebaseConfig);
     database = firebase.database();
   }
-
+  /** TODO : Clean up doubles when adding new train - whole list gets re-added and ends up with duplicates **/
+  
   function getTrainData() {
     var trainRef = firebase.database().ref('trains/');
     
@@ -32,6 +33,8 @@
                       <td>${train['Next Arrival']}</td>
                       <td>${train['Minutes Away']}</td>
                     </tr>`;
+
+
         $('.table tbody').append(html);
       })
       
