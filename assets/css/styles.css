@@ -1,0 +1,13 @@
+#addTrain, #currentSchedule {
+  padding: 0 15px;
+}
+#new-train-form label {
+  line-height: 2;
+  margin-top: 15px;
+}
+#new-train-form input {
+  width: 100%;
+}
+#new-train-form #submit-btn {
+  margin: 20px auto;
+}
