@@ -22,7 +22,19 @@
     var trainRef = firebase.database().ref('trains/');
     
     trainRef.on("value", function(snapshot) {
-      console.log('snapshot : ' + snapshot.val());
+      var trains = snapshot.val();
+
+      Object.values(trains).forEach(function(train) {
+        var html = `<tr>
+                      <td>${train['Train Name']}</td>
+                      <td>${train['destination']}</td>
+                      <td>${train['frequency']}</td>
+                      <td>${train['Next Arrival']}</td>
+                      <td>${train['Minutes Away']}</td>
+                    </tr>`;
+        $('.table tbody').append(html);
+      })
+      
     })
   }
 
