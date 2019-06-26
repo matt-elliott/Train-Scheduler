@@ -20,9 +20,19 @@
   /** TODO : Clean up doubles when adding new train - whole list gets re-added and ends up with duplicates **/
   
   function getTrainData() {
+
     var trainRef = firebase.database().ref('trains/');
-    console.log(snapshot.child("train"));
-    trainRef.on("value", function(snapshot) {
+    trainRef.on("value", function (snapshot) {
+      if (!snapshot.child("trains").exists()) {
+        var html = `
+        <tr><td colspan="5" class="text-light">
+          <h3 class="text-center">Sorry, no trains today</h3>
+          <h6 class="text-center">Have you thought about buying a car? I hear they're quite popular…</h6>
+        </tr></td>
+        `;
+        $('.table tbody').append(html);
+        return;
+      }
       var trains = snapshot.val();
 
       Object.values(trains).forEach(function(train) {
