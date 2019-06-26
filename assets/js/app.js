@@ -21,7 +21,7 @@
   
   function getTrainData() {
     var trainRef = firebase.database().ref('trains/');
-    
+    console.log(snapshot.child("train"));
     trainRef.on("value", function(snapshot) {
       var trains = snapshot.val();
 
@@ -45,17 +45,19 @@
     var trainName = $('#train-name').val().trim();
     var destination = $('#destination').val().trim();
     var frequency = $('#frequency').val().trim();
-    var nextArrival = $('#next-arrival').val().trim();
+    var firstTrainTime = $('#first-train-time').val().trim();
     var minutesAway = $('#minutes-away').val().trim();
 
-    console.log(trainName, destination, frequency, nextArrival, minutesAway);
+    console.log(trainName, destination, frequency, firstTrainTime, minutesAway);
 
     database.ref(`trains/${trainName}`).set({
-      "Train Name": trainName,
-      "destination": destination,
-      "frequency": frequency,
-      "Next Arrival": nextArrival,
-      "Minutes Away": minutesAway
+      "train" : {
+        "train name": trainName,
+        "destination": destination,
+        "frequency": frequency,
+        "next arrival": firstTrainTime,
+        "minutes away": minutesAway
+      }
     });
   }
 
