@@ -1,5 +1,47 @@
+:root {
+  --blue: #5D5D81;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #8A716A;
+  --gray-dark: #584844;
+  --primary: #BFCDE0;
+  --secondary: #3B3355;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #FEFCFD;
+  --dark: #1d1d1d;
+}
+body {
+  background-color: var(--dark);
+}
+.jumbotron {
+  background-color: var(--primary);
+  color: var(--secondary);
+}
 #addTrain, #currentSchedule {
+  background-color: var(--primary);
+  color: var(--dark);
   padding: 0 15px;
+  border-radius: 0.3rem;
+}
+#addTrain header, #currentSchedule header {
+  background-color: var(--primary);
+  padding: 20px 0;
+  color: var(--dark);
+  border-radius: 0.3rem 0.3rem 0 0;
+}
+#currentSchedule {
+  margin-bottom: 60px;
 }
 #new-train-form label {
   line-height: 2;
