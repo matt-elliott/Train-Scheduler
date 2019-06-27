@@ -20,31 +20,35 @@
   /** TODO : Clean up doubles when adding new train - whole list gets re-added and ends up with duplicates **/
   
   function getTrainData() {
-
     var trainRef = firebase.database().ref();
     trainRef.on("value", function (snapshot) {
       if (!snapshot.child("trains").exists()) {
         var html = `
-        <tr><td colspan="5" class="text-light">
-          <h3 class="text-center">Sorry, no trains today</h3>
-          <h6 class="text-center">Have you thought about buying a car? I hear they're quite popular…</h6>
-        </tr></td>
+          <tr><td colspan="5" class="text-light">
+            <h3 class="text-center">Sorry, no trains today</h3>
+            <h6 class="text-center">Have you thought about buying a car? I hear they're quite popular…</h6>
+          </tr></td>
         `;
         $('.table tbody').append(html);
         return;
       }
       var trains = snapshot.val().trains;
-
+      
       Object.values(trains).forEach(function (train) {
-        console.log(
-            Math.ceil(train['minutes away'])
-        );
+        var now = moment();
+        var firstTrainTime = moment(train['first-train-time'], 
+        "HH:mm");
+        var firstTrainTimeToNow = moment.duration(now.diff(firstTrainTime));
+        var remainingTime = ( (firstTrainTimeToNow._data.hours * 60) + firstTrainTimeToNow._data.minutes ) % train.frequency;
+        var minutesAway = train.frequency - remainingTime;
+        var nextArrival = moment(now).add(minutesAway, 'minutes').format('hh:mm:A');
+
         var html = `<tr>
                       <td>${train['train name']}</td>
                       <td>${train['destination']}</td>
                       <td>${train['frequency']}</td>
-                      <td>${train['next arrival']}</td>
-                      <td>${train['minutes away']}</td>
+                      <td>${nextArrival}</td>
+                      <td>${minutesAway}</td>
                     </tr>`;
 
 
@@ -58,21 +62,16 @@
     var trainName = $('#train-name').val().trim();
     var destination = $('#destination').val().trim();
     var frequency = $('#frequency').val().trim();
-    var firstTrainTime = moment($('#first-train-time').val().trim(), "HH:mm");
-    var nextArrival = moment().subtract(firstTrainTime);
-    var minutesAway = moment().diff(moment(firstTrainTime), "minutes");
-    console.log(firstTrainTime);
-    
-    console.log(trainName, destination, frequency, firstTrainTime, minutesAway);
+    var firstTrainTime = $('#first-train-time').val().trim();
 
-    // database.ref(`trains/`).set({
-    //   "train name": trainName,
-    //   "destination": destination,
-    //   "frequency": frequency,
-    //   "next arrival": nextArrival,
-    //   "minutes away": minutesAway
-    // });
-    console.log("train name", trainName, '\n', "destination", destination, '\n', "frequency", frequency, '\n', "next arrival", nextArrival, '\n', "minutes away", minutesAway);
+
+    database.ref(`trains/${trainName}`).set({
+      "train name": trainName,
+      "destination": destination,
+      "frequency": frequency,
+      "firstTrainTime": frequency
+    });
+    // console.log("train name", trainName, '\n', "destination", destination, '\n', "frequency", frequency, '\n', "next arrival", nextArrival, '\n', "minutes away", minutesAway);
   }
   initFirebase();
   getTrainData();
