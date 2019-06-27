@@ -21,7 +21,7 @@
   
   function getTrainData() {
 
-    var trainRef = firebase.database().ref('trains/');
+    var trainRef = firebase.database().ref();
     trainRef.on("value", function (snapshot) {
       if (!snapshot.child("trains").exists()) {
         var html = `
@@ -33,15 +33,18 @@
         $('.table tbody').append(html);
         return;
       }
-      var trains = snapshot.val();
+      var trains = snapshot.val().trains;
 
-      Object.values(trains).forEach(function(train) {
+      Object.values(trains).forEach(function (train) {
+        console.log(
+            Math.ceil(train['minutes away'])
+        );
         var html = `<tr>
-                      <td>${train['Train Name']}</td>
+                      <td>${train['train name']}</td>
                       <td>${train['destination']}</td>
                       <td>${train['frequency']}</td>
-                      <td>${train['Next Arrival']}</td>
-                      <td>${train['Minutes Away']}</td>
+                      <td>${train['next arrival']}</td>
+                      <td>${train['minutes away']}</td>
                     </tr>`;
 
 
@@ -55,22 +58,22 @@
     var trainName = $('#train-name').val().trim();
     var destination = $('#destination').val().trim();
     var frequency = $('#frequency').val().trim();
-    var firstTrainTime = $('#first-train-time').val().trim();
-    var minutesAway = $('#minutes-away').val().trim();
-
+    var firstTrainTime = moment($('#first-train-time').val().trim(), "HH:mm");
+    var nextArrival = moment().subtract(firstTrainTime);
+    var minutesAway = moment().diff(moment(firstTrainTime), "minutes");
+    console.log(firstTrainTime);
+    
     console.log(trainName, destination, frequency, firstTrainTime, minutesAway);
 
-    database.ref(`trains/${trainName}`).set({
-      "train" : {
-        "train name": trainName,
-        "destination": destination,
-        "frequency": frequency,
-        "next arrival": firstTrainTime,
-        "minutes away": minutesAway
-      }
-    });
+    // database.ref(`trains/`).set({
+    //   "train name": trainName,
+    //   "destination": destination,
+    //   "frequency": frequency,
+    //   "next arrival": nextArrival,
+    //   "minutes away": minutesAway
+    // });
+    console.log("train name", trainName, '\n', "destination", destination, '\n', "frequency", frequency, '\n', "next arrival", nextArrival, '\n', "minutes away", minutesAway);
   }
-
   initFirebase();
   getTrainData();
 
