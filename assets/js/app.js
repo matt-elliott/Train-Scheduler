@@ -41,7 +41,8 @@
         var firstTrainTimeToNow = moment.duration(now.diff(firstTrainTime));
         var remainingTime = ( (firstTrainTimeToNow._data.hours * 60) + firstTrainTimeToNow._data.minutes ) % train.frequency;
         var minutesAway = train.frequency - remainingTime;
-        var nextArrival = moment(now).add(minutesAway, 'minutes').format('hh:mm:A');
+
+        var nextArrival = moment().add(minutesAway, 'minutes').format('hh:mm A');
 
         var html = `<tr>
                       <td>${train['train name']}</td>
@@ -69,7 +70,7 @@
       "train name": trainName,
       "destination": destination,
       "frequency": frequency,
-      "firstTrainTime": frequency
+      "firstTrainTime": firstTrainTime
     });
     // console.log("train name", trainName, '\n', "destination", destination, '\n', "frequency", frequency, '\n', "next arrival", nextArrival, '\n', "minutes away", minutesAway);
   }
