@@ -1,5 +1,4 @@
 (function init() {
-  console.log('here we go!');
   var database;
 
   function initFirebase() {
@@ -36,13 +35,15 @@
       
       Object.values(trains).forEach(function (train) {
         var now = moment();
-        var firstTrainTime = moment(train['first-train-time'], 
-        "HH:mm");
-        var firstTrainTimeToNow = moment.duration(now.diff(firstTrainTime));
-        var remainingTime = ( (firstTrainTimeToNow._data.hours * 60) + firstTrainTimeToNow._data.minutes ) % train.frequency;
+        var firstTrainTime = moment(train.firstTrainTime, 
+          "HH:mm");
+        
+        var firstTrainTimeToNow = moment().diff(firstTrainTime, "minutes");
+        var remainingTime = firstTrainTimeToNow % train.frequency;
         var minutesAway = train.frequency - remainingTime;
 
-        var nextArrival = moment().add(minutesAway, 'minutes').format('hh:mm A');
+        var nextArrival = moment().add(minutesAway, "minutes").format("hh:mm");
+      
 
         var html = `<tr>
                       <td>${train['train name']}</td>
@@ -72,7 +73,6 @@
       "frequency": frequency,
       "firstTrainTime": firstTrainTime
     });
-    // console.log("train name", trainName, '\n', "destination", destination, '\n', "frequency", frequency, '\n', "next arrival", nextArrival, '\n', "minutes away", minutesAway);
   }
   initFirebase();
   getTrainData();
