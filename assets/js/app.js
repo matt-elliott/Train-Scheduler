@@ -49,9 +49,9 @@
         var html = `<tr>
                       <td>${train['train name']}</td>
                       <td>${train['destination']}</td>
-                      <td>${train['frequency']}</td>
+                      <td class="d-none d-sm-block">${train['frequency']}</td>
                       <td>${nextArrival}</td>
-                      <td>${minutesAway}</td>
+                      <td class="d-none d-sm-block">${minutesAway}</td>
                     </tr>`;
 
 
