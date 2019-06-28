@@ -19,7 +19,9 @@
   /** TODO : Clean up doubles when adding new train - whole list gets re-added and ends up with duplicates **/
   
   function getTrainData() {
+    $('table tbody').empty();
     var trainRef = firebase.database().ref();
+
     trainRef.on("value", function (snapshot) {
       if (!snapshot.child("trains").exists()) {
         var html = `
@@ -43,8 +45,7 @@
         var minutesAway = train.frequency - remainingTime;
 
         var nextArrival = moment().add(minutesAway, "minutes").format("hh:mm");
-      
-
+    
         var html = `<tr>
                       <td>${train['train name']}</td>
                       <td>${train['destination']}</td>
